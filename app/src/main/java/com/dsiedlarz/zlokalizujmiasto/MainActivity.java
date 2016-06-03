@@ -14,9 +14,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.dsiedlarz.zlokalizujmiasto.GeocodeResponse.GeocodeResponse;
+import com.dsiedlarz.zlokalizujmiasto.ListFragment2.City.CityContent;
 import com.dsiedlarz.zlokalizujmiasto.ListFragment2.ItemFragment;
 import com.dsiedlarz.zlokalizujmiasto.ListFragment2.MyItemRecyclerViewAdapter;
-import com.dsiedlarz.zlokalizujmiasto.ListFragment2.City.CityContent;
 
 import java.util.concurrent.ExecutionException;
 
@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if(getSupportActionBar()!=null)
         getSupportActionBar().setIcon(R.drawable.walking);
 
 
@@ -72,17 +73,18 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
 
     @Override
     public void onListFragmentInteraction(CityContent.DummyItem item) {
-        Toast.makeText(this, item.content, Toast.LENGTH_LONG).show();
         Downloader downloader = new Downloader();
-        try {
-            GeocodeResponse geocodeResponse = downloader.execute(item.content).get();
-            Intent intent = new Intent(this, Main2Activity.class);
 
-            if (isOnline()) {
+
+        if (isOnline()) {
+            try {
+                GeocodeResponse geocodeResponse = downloader.execute(item.content).get();
+                Intent intent = new Intent(this, Main2Activity.class);
+
+
                 if (geocodeResponse.getStatus().toString().compareTo("OK") != 0) {
-                    Toast.makeText(this, geocodeResponse.getStatus(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, geocodeResponse.getStatus(), Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(this, geocodeResponse.getResults().get(0).getFormatted_address(), Toast.LENGTH_LONG).show();
                     intent.putExtra("miejscowosc", geocodeResponse.getResults().get(0).getAddress_components().size() > 0 ?
                             geocodeResponse.getResults().get(0).getAddress_components().get(0).getLong_name().toString() : "-");
                     intent.putExtra("gmina", geocodeResponse.getResults().get(0).getAddress_components().size() - 4 > 0 ?
@@ -93,38 +95,37 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
                             geocodeResponse.getResults().get(0).getAddress_components().get(geocodeResponse.getResults().get(0).getAddress_components().size() - 2).getLong_name().toString() : "-");
                     intent.putExtra("kraj", geocodeResponse.getResults().get(0).getAddress_components().get(geocodeResponse.getResults().get(0).getAddress_components().size() - 1).getLong_name().toString());
 
-                }
 
-            } else {
-                Toast.makeText(this,"Połącz sie najpierw z internetem",Toast.LENGTH_LONG).show();
+                }
+                startActivity(intent);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
             }
-            startActivity(intent);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
+        } else {
+            Toast.makeText(this, "Połącz sie najpierw z internetem", Toast.LENGTH_SHORT).show();
+
         }
     }
 
     public void addCity(View view) {
         if (cityName.getText().length() != 0) {
-            boolean ok=true;
+            boolean ok = true;
 
-            for(CityContent.DummyItem d: CityContent.ITEMS)
-            {
-                if (d.content.compareToIgnoreCase(cityName.getText().toString())==0) ok=false;
+            for (CityContent.DummyItem d : CityContent.ITEMS) {
+                if (d.content.compareToIgnoreCase(cityName.getText().toString()) == 0) ok = false;
             }
-            if(ok)
-            {
-                Toast.makeText(this, "Wymyśl coś nowego ", Toast.LENGTH_LONG).show();
-            }
-            else
-            {
+            if (!ok) {
+                Toast.makeText(this, "Wymyśl coś nowego ", Toast.LENGTH_SHORT).show();
+            } else {
+
                 CityContent.addItem(CityContent.createDummyItem(cityName.getText().toString()));
                 adapter.notifyDataSetChanged();
+                Toast.makeText(this, "Dodano pomyślnie ", Toast.LENGTH_SHORT).show();
             }
-        }
-        Toast.makeText(this, "Wprowadz nazwę!", Toast.LENGTH_LONG).show();
+        } else
+            Toast.makeText(this, "Wprowadz nazwę!", Toast.LENGTH_SHORT).show();
     }
 
 

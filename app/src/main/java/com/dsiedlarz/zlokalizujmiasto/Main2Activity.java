@@ -27,12 +27,12 @@ public class Main2Activity extends AppCompatActivity {
         setContentView(R.layout.activity_main2);
         Intent i = getIntent();
 
+        if(getSupportActionBar()!=null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("Powrót");
+            getSupportActionBar().setIcon(R.drawable.walking);
 
-       getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Powrót");
-        getSupportActionBar().setIcon(R.drawable.walking);
-
-
+        }
 
         TextView miejscowość=(TextView)findViewById(R.id.miejscowosc);
         TextView gmina = (TextView)findViewById(R.id.gmina);
