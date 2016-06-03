@@ -1,10 +1,6 @@
 package com.dsiedlarz.zlokalizujmiasto;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -13,10 +9,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.dsiedlarz.zlokalizujmiasto.GeocodeResponse.*;
-
-import com.dsiedlarz.zlokalizujmiasto.GeocodeResponse.GeocodeResponse;
 
 public class Main2Activity extends AppCompatActivity {
 

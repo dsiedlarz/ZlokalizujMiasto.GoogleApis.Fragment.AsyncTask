@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements ItemFragment.OnLi
                 if (geocodeResponse.getStatus().toString().compareTo("OK") != 0) {
                     Toast.makeText(this, geocodeResponse.getStatus(), Toast.LENGTH_SHORT).show();
                 } else {
+                    Toast.makeText(this, geocodeResponse.getResults().get(0).getFormatted_address(), Toast.LENGTH_SHORT).show();
                     intent.putExtra("miejscowosc", geocodeResponse.getResults().get(0).getAddress_components().size() > 0 ?
                             geocodeResponse.getResults().get(0).getAddress_components().get(0).getLong_name().toString() : "-");
                     intent.putExtra("gmina", geocodeResponse.getResults().get(0).getAddress_components().size() - 4 > 0 ?
